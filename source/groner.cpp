@@ -293,6 +293,7 @@ char gro::recognizeNumeric(std::vector<vertex>& vertices, std::vector<direction4
 	}
 	else if (directionChanges.size() <= 4)
 	{
+		// TODO: consider clockwise 0s
 		if (directionChanges[0] == direction4::UP 
 			&& directionChanges[1] == direction4::RIGHT
 			&& directionChanges[2] == direction4::DOWN)
@@ -339,11 +340,47 @@ char gro::recognizeNumeric(std::vector<vertex>& vertices, std::vector<direction4
 					return '0'; // 0 starting from upper left
 			}
 		}
-		else if (directionChanges[0] == direction4::RIGHT && directionChanges[1] == direction4::DOWN
-			&& directionChanges[2] == direction4::LEFT && directionChanges[3] == direction4::RIGHT)
+		else if (directionChanges[0] == direction4::RIGHT)
 		{
-			return '2'; // angled 2 with flat top
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::LEFT
+				&& directionChanges[3] == direction4::RIGHT)
+			{
+				return '2'; // angled 2 with flat top
+			}
+			else if (directionChanges[1] == direction4::LEFT
+				&& directionChanges[2] == direction4::RIGHT
+				&& directionChanges[3] == direction4::LEFT)
+			{
+				return '3'; // pointy 3
+			}
 		}
+	}
+	else if (directionChanges.size() <= 5)
+	{
+		// curved 6
+		// clockwise curved 9
+		// counterclockwise curved 9
+		// stepped 5
+		// pointy upper, round lower 3
+		// round upper, pointy lower 3
+		// angled 2 with round top
+	}
+	else if (directionChanges.size() <= 6)
+	{ 
+		// curved stepped 5
+		// curved 3
+		// clockhise hourglass 8
+		// counterclockwise hourglass 8
+	}
+	else if (directionChanges.size() <= 8)
+	{
+		// clockwhise round 8
+		// counterclockwise round 8
+	}
+	else
+	{
+		// tangled mess that probably is an 8
 	}
 
 	return '#'; // "Error" case, no number found (in this step) 

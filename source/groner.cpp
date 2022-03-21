@@ -252,6 +252,7 @@ std::vector<size_t> gro::findCorners(std::vector<vertex>& vertices)
 
 char gro::recognizeNumeric(std::vector<vertex>& vertices, std::vector<direction4>& directionChanges, std::vector<size_t>& corners)
 {
+	// TODO: add more cases for 4
 	if (directionChanges.size() == 1)
 	{
 		return '1'; // straight line 1
@@ -358,29 +359,223 @@ char gro::recognizeNumeric(std::vector<vertex>& vertices, std::vector<direction4
 	}
 	else if (directionChanges.size() <= 5)
 	{
-		// curved 6
-		// clockwise curved 9
-		// counterclockwise curved 9
-		// stepped 5
-		// pointy upper, round lower 3
-		// round upper, pointy lower 3
-		// angled 2 with round top
+		if (directionChanges[0] == direction4::LEFT)
+		{
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::RIGHT)
+			{
+				if (directionChanges[3] == direction4::UP)
+				{
+					if (directionChanges[4] == direction4::LEFT)
+					{
+						return '6'; // curved 6
+					}
+					else if (directionChanges[4] == direction4::DOWN)
+					{
+						return '9'; // counterclockwise 9
+					}
+				}
+				else if (directionChanges[3] == direction4::DOWN
+					&& directionChanges[4] == direction4::LEFT)
+				{
+					return '5'; // stepped 5
+				}
+			}
+			else if (directionChanges[1] == direction4::UP
+				&& directionChanges[2] == direction4::RIGHT
+				&& directionChanges[3] == direction4::DOWN 
+				&& directionChanges[4] == direction4::LEFT)
+			{
+				return '9'; // clockwise curved 9
+			}
+		}
+		else if (directionChanges[0] == direction4::RIGHT)
+		{
+			if (directionChanges[1] == direction4::LEFT)
+			{
+				if (directionChanges[2] == direction4::RIGHT 
+					&& directionChanges[3] == direction4::DOWN 
+					&& directionChanges[4] == direction4::LEFT) 
+				{
+					return '3'; // pointy upper, round lower 3
+				}
+			}
+			else if (directionChanges[1] == direction4::DOWN)
+			{
+				if (directionChanges[2] == direction4::LEFT
+					&& directionChanges[3] == direction4::RIGHT 
+					&& directionChanges[4] == direction4::LEFT)
+				{
+					return '3'; // round upper, pointy lower 3
+				}
+			}
+		}
+		else if (directionChanges[0] == direction4::UP 
+			&& directionChanges[1] == direction4::RIGHT 
+			&& directionChanges[2] == direction4::DOWN 
+			&& directionChanges[3] == direction4::LEFT 
+			&& directionChanges[4] == direction4::RIGHT) 
+		{
+			return '2'; // angled 2 with round top
+		}
 	}
 	else if (directionChanges.size() <= 6)
-	{ 
-		// curved stepped 5
-		// curved 3
-		// clockhise hourglass 8
-		// counterclockwise hourglass 8
+	{
+		if (directionChanges[0] == direction4::UP)
+		{
+			if (directionChanges[1] == direction4::LEFT 
+				&& directionChanges[2] == direction4::DOWN
+				&& directionChanges[3] == direction4::RIGHT
+				&& directionChanges[4] == direction4::UP
+				&& directionChanges[5] == direction4::LEFT)
+			{
+				return '6'; // more curved 6
+			}
+		}
+		else if (directionChanges[0] == direction4::LEFT)
+		{
+			if (directionChanges[1] == direction4::DOWN)
+			{
+				if (directionChanges[2] == direction4::RIGHT)
+				{
+					if (directionChanges[3] == direction4::UP)
+					{
+						if (directionChanges[4] == direction4::DOWN
+							&& directionChanges[5] == direction4::LEFT)
+						{
+							return '9'; // counterclockwise curved 9
+						}
+					}
+					else if (directionChanges[3] == direction4::DOWN)
+					{
+						if (directionChanges[4] == direction4::LEFT
+							&& directionChanges[5] == direction4::UP)
+						{
+							return '5'; // curved stepped 5
+						}
+					}
+					else if (directionChanges[3] == direction4::LEFT)
+					{
+						if (directionChanges[4] == direction4::UP
+							&& directionChanges[5] == direction4::RIGHT)
+						{
+							return '8'; // counterclockwise hourglass 8
+						}
+					}
+				}
+			}
+			else if (directionChanges[1] == direction4::UP)
+			{
+				if (directionChanges[2] == direction4::RIGHT
+					&& directionChanges[3] == direction4::DOWN
+					&& directionChanges[4] == direction4::LEFT
+					&& directionChanges[5] == direction4::UP)
+				{
+					return '9'; // clockwise more curved 9
+				}
+			}
+		}
+		else if (directionChanges[0] == direction4::RIGHT
+			&& directionChanges[1] == direction4::DOWN
+			&& directionChanges[2] == direction4::LEFT
+			&& directionChanges[3] == direction4::RIGHT)
+		{
+			if (directionChanges[4] == direction4::DOWN
+				&& directionChanges[5] == direction4::LEFT)
+			{
+					return '3'; // curved 3
+			}
+			else if (directionChanges[4] == direction4::UP
+				&& directionChanges[4] == direction4::LEFT)
+			{
+			return '8'; // clockhise hourglass 8
+			}
+		}
+	}
+	else if (directionChanges.size() <= 7)
+	{
+		if (directionChanges[0] == direction4::UP)
+		{
+			if (directionChanges[1] == direction4::RIGHT
+				&& directionChanges[2] == direction4::DOWN
+				&& directionChanges[3] == direction4::LEFT
+				&& directionChanges[4] == direction4::RIGHT
+				&& directionChanges[5] == direction4::DOWN
+				&& directionChanges[6] == direction4::LEFT)
+			{
+				return '3'; // upper more curved 3
+			}
+		}
+		else if (directionChanges[0] == direction4::RIGHT)
+		{
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::LEFT
+				&& directionChanges[3] == direction4::RIGHT
+				&& directionChanges[4] == direction4::DOWN
+				&& directionChanges[5] == direction4::LEFT 
+				&& directionChanges[6] == direction4::UP)
+			{
+				return '3'; // lower more curved 3
+			}
+		}
+		else if (directionChanges[0] == direction4::LEFT)
+		{
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::RIGHT
+				&& directionChanges[3] == direction4::UP
+				&& directionChanges[4] == direction4::DOWN
+				&& directionChanges[5] == direction4::LEFT
+				&& directionChanges[6] == direction4::UP)
+			{
+				return '9'; // counterclockwise more curved 9
+			}
+		}
 	}
 	else if (directionChanges.size() <= 8)
 	{
-		// clockwhise round 8
-		// counterclockwise round 8
+		if (directionChanges[0] == direction4::LEFT)
+		{
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::RIGHT
+				&& directionChanges[3] == direction4::DOWN
+				&& directionChanges[4] == direction4::LEFT
+				&& directionChanges[5] == direction4::UP
+				&& directionChanges[6] == direction4::RIGHT
+				&& directionChanges[7] == direction4::UP)
+			{
+				return '8'; // counterclockwise round 8
+			}
+		}
+		else if (directionChanges[0] == direction4::RIGHT)
+		{
+			if (directionChanges[1] == direction4::DOWN
+				&& directionChanges[2] == direction4::LEFT
+				&& directionChanges[3] == direction4::DOWN
+				&& directionChanges[4] == direction4::RIGHT
+				&& directionChanges[5] == direction4::UP
+				&& directionChanges[6] == direction4::LEFT
+				&& directionChanges[7] == direction4::UP)
+			{
+				return '8'; // clockwise round 8
+			}
+		}
+		else if (directionChanges[0] == direction4::UP)
+		{
+			if (directionChanges[1] == direction4::RIGHT 
+				&& directionChanges[2] == direction4::DOWN
+				&& directionChanges[3] == direction4::LEFT
+				&& directionChanges[4] == direction4::RIGHT 
+				&& directionChanges[5] == direction4::DOWN
+				&& directionChanges[6] == direction4::LEFT
+				&& directionChanges[7] == direction4::UP)
+			{
+				return '3'; // all around more curved 3
+			}
+		}
 	}
 	else
 	{
-		// tangled mess that probably is an 8
+		return '8'; // tangled mess that probably is an 8
 	}
 
 	return '#'; // "Error" case, no number found (in this step) 
